@@ -6,6 +6,9 @@ $scope.form = {
     scriptText : "",
     scriptConfig : undefined
 }
+var scriptTextEditor = undefined;
+var scriptConfigEditor = undefined;
+var scriptResponseEditor = undefined;
 
 var buildTestPayload = (scriptText,scriptConfig) => {
     let config = JSON.parse(scriptConfig)
@@ -15,8 +18,44 @@ var buildTestPayload = (scriptText,scriptConfig) => {
     }
 }
 
+jQuery.loadScript = function (url, callback) {
+    jQuery.ajax({
+        url: url,
+        dataType: 'script',
+        success: callback,
+        async: true
+    });
+}
+
+
+$.loadScript('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js', function(){
+    $.loadScript('https://codemirror.net/mode/javascript/javascript.js', function(){
+        scriptTextEditor = CodeMirror.fromTextArea(document.getElementById("scriptText"), {
+            mode: "javascript",
+            lineNumbers: true,
+            theme: "monokai"
+        });
+        scriptConfigEditor = CodeMirror.fromTextArea(document.getElementById("scriptConfig"), {
+            mode: "javascript",
+            lineNumbers: true,
+            theme: "monokai"
+        });
+        scriptResponseEditor = CodeMirror.fromTextArea(document.getElementById("scriptResponse"), {
+            mode: "javascript",
+            lineNumbers: true,
+            theme: "monokai",
+            readOnly:true
+        });
+    });
+});
+
+
+
+
 $scope.testScript = function() {
     $scope.displayMessage = true;
+    $scope.form.scriptText = scriptTextEditor.getValue();
+    $scope.form.scriptConfig = scriptConfigEditor.getValue();
     if ($scope.form.scriptText !== "" && $scope.form.scriptConfig !== "") {
         //Building payload
         try{
@@ -36,6 +75,7 @@ $scope.testScript = function() {
             $scope.taskTestResponse = "Script successfully tested";
             $scope.responseCode = response.status.toString();
             $scope.scriptResponse = JSON.stringify(response.data);
+            scriptResponseEditor.setValue(JSON.stringify(response.data));
         }).catch(err => {
             $scope.message = "error";
             $scope.taskTestResponse = "Script unsuccessfully tested";
@@ -56,6 +96,7 @@ $scope.loadFile = function() {
         reader.addEventListener('load', function (e) {
             let data = e.target.result;
             $scope.$apply(function(){$scope.form.scriptText = data;});;
+            scriptTextEditor.setValue(data);
         });
         reader.readAsBinaryString(f);
     }

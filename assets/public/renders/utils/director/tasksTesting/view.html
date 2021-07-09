@@ -29,6 +29,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://codemirror.net/theme/monokai.css"/>
 </head>
 
 <body>
@@ -52,7 +54,7 @@
                 <button ng-click="loadFile()" class="btn btn-primary buttonLoad">Load Script</button>
                 <div style="margin-top:30px;">
                     <h4>Script Configuration</h4>
-                    <textarea ng-model="form.scriptConfig" type="text" class="form-control halfTextarea"></textarea>
+                    <textarea ng-model="form.scriptConfig" type="text" class="form-control halfTextarea" id="scriptConfig"></textarea>
                     <button ng-click="testScript()" class="btn btn-primary buttonTest">Test</button>
                 </div>
             </div>
@@ -70,13 +72,12 @@
                 </div>
             </div>
             <div ng-if="message === ''">
-                    <h4 style="margin-top: 82px;">Result</h4>
-                    <textarea class="form-control fullTextarea" readonly>{{scriptResponse}}</textarea>
+                <h4 style="margin-top: 82px;">Result</h4>
             </div>
             <div ng-if="message !== ''">
                 <h4>Result</h4>
-                <textarea class="form-control fullTextarea" readonly>{{scriptResponse}}</textarea>
             </div>
+            <textarea class="form-control fullTextarea" id="scriptResponse">{{scriptResponse}}</textarea>
         </div>  
     </div>
 </body>

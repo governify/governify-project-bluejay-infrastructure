@@ -16,14 +16,20 @@
 		margin: 0;
 		padding: 0;
 	}
+	.h4, h4 {
+		font-size: 18px;
+	}
+	.h5, h5 {
+		font-size: 14px;
+	}
 
-	
+	b, strong {
+		font-weight: bold;
+	}
 
 	p {
 		line-height: 180%;
 	}
-
-	strong {}
 
 	a {
 		color: #ee0000;
@@ -35,7 +41,26 @@
 
 	.container {
 		margin: 0em auto;
+		max-width: 1200px!important;
 		width: 1200px;
+	}
+
+	.card-success {
+		border-color: #d6e9c6;
+	}
+	.card-success>.card-header {
+		color: #3c763d;
+		background-color: #dff0d8;
+		border-color: #d6e9c6;
+	}
+	.card-info {
+		border-color: #bce8f1;
+		height: 100%;
+	}
+	.card-info>.card-header {
+		color: #31708f;
+		background-color: #d9edf7;
+		border-color: #bce8f1;
 	}
 
 	/*********************************************************************************/
@@ -79,8 +104,6 @@
 	/* List Styles                                                                   */
 
 	/*********************************************************************************/
-
-	ul.style1 {}
 
 	/*********************************************************************************/
 
@@ -160,13 +183,26 @@
 		font-size: 1em;
 		color: #FFF;
 	}
-
 	.button-alt {
 		padding: 1em 2em;
 		border-color: rgba(0, 0, 0, .8);
 		color: rgba(0, 0, 0, .8);
 	}
-
+	.btn-success, .btn-success.disabled, .btn-success:disabled {
+		color: #fff;
+		background-color: #5cb85c;
+		border-color: #5cb85c;
+	}
+	.btn-info, .btn-info.disabled, .btn-info:disabled {
+		color: #fff;
+		background-color: #5bc0de;
+		border-color: #46b8da;
+	}
+	.btn-primary, .btn-primary.disabled, .btn-primary:disabled {
+		color: #fff;
+		background-color: #337ab7;
+		border-color: #2e6da4;
+	}
 	/*********************************************************************************/
 
 	/* 4-column                                                                      */
@@ -177,7 +213,7 @@
 		width: 235px;
 	}
 
-	.box1, .box2, .box3, {
+	.box1, .box2, .box3 {
 		float: left;
 		margin-right: 20px;
 	}
@@ -325,15 +361,11 @@
 		color: rgba(255, 255, 255, 0.80);
 	}
 
-	#menu li:hover a, #menu li.active a, #menu li.active span {}
-
 	#menu .active a {
 		border: 2px solid rgba(255, 255, 255, 1);
 		border-radius: 6px;
 		color: rgba(255, 255, 255, 1);
 	}
-
-	#menu .icon {}
 
 	/*********************************************************************************/
 
@@ -369,7 +401,6 @@
 
 	/*********************************************************************************/
 
-	#page {}
 
 	/*********************************************************************************/
 
@@ -377,7 +408,6 @@
 
 	/*********************************************************************************/
 
-	#content {}
 
 	/*********************************************************************************/
 
@@ -385,7 +415,6 @@
 
 	/*********************************************************************************/
 
-	#sidebar {}
 
 	/*********************************************************************************/
 
@@ -393,7 +422,6 @@
 
 	/*********************************************************************************/
 
-	#footer {}
 
 	/*********************************************************************************/
 

@@ -42,7 +42,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=80
-      - LAYOUT=bootstrap3.html
+      - LAYOUT=bootstrap5.html
       - LOGIN_USER=${USER_RENDER:?}
       - LOGIN_PASSWORD=${PASS_RENDER:?}
       - DEFAULT_VIEW=http://bluejay-assets-manager/api/v1/public/renders/index/view.html

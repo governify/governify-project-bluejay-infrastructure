@@ -1,0 +1,69 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$_[infrastructure.external.assets.default]/api/v1/public/renders/bills/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+
+    <h2>Estado de las facturas</h2>
+
+    <div class="row" ng-cloak>
+        <div class="card ">
+            <div class="card-content ">
+                <ul>                        
+                    <li>
+                        <strong>ANS</strong>: {{agreement}}
+                    </li>
+                    <li>
+                        <strong>Primera factura</strong>: {{firstBill}}
+                    </li>
+                    <li>
+                        <strong>Última factura</strong>: {{lastBill}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <ul ng-repeat="year in years">
+        <h4>{{year}}</h4>
+        <li><hr class="dropdown-divider"></li>
+        <table class="months-table">
+            <tr ng-repeat="m in yearMonths[year]">
+                <td class="months">{{m.month}}</td>
+                <td ng-if="m.state == 'open'"class="opened">Abierta</td>
+                <td ng-if="m.state == 'closed'"class="closed">Cerrada</td>
+                <td ng-if="m.state == 'open'"><a data-bs-toggle="modal" data-bs-target="#modal1" class="btn close" ng-click="changeCloseData(m.bill, m.month, year)">Cerrar</a></td>
+                <td ng-if="m.state == 'closed'" title="Fecha de cierre" class="closeDate">{{m.closeDate | date:'dd/MM/yyyy'}}</td>
+            </tr>
+        </table>
+    </ul>
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row modal-text">
+                        ¿Está seguro de que quiere cerrar la factura? Esta acción impedirá que se pueda modificar el estado
+                        del acuerdo o marcar un falso positivo en el periodo relativo al mes de {{currentMonth}} {{currentYear}}.
+                        <b class="modal-bold">Esta acción no podrá deshacerse.</b>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warn" data-bs-dismiss="modal">Cancelar</button>
+                    <button ng-click="closeBill(currentBill)" class="btn btn-succ" data-bs-dismiss="modal">Cerrar {{currentMonth}} {{currentYear}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-text">
+                Desarrollado por el&nbsp;
+                <a class="footer-ref" style="color:white" target="_blank" href="http://www.isa.us.es">grupo ISA</a>
+            </div>
+        </div>
+    </footer>
+</body>

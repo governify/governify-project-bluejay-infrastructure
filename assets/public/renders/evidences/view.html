@@ -1,0 +1,170 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$_[infrastructure.external.assets.default]/api/v1/public/renders/evidences/style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+    <h2>Visualizador de evidencias</h2>
+    <!--<a ng-if="!loadingOverrides" href="$_[infrastructure.external.render.default]/render?model=$_[infrastructure.internal.assets.default]/api/v1/public/renders/renders/bills/model.json&view=$_[infrastructure.internal.assets.default]/api/v1/public/renders/renders/bills/view.html&ctrl=$_[infrastructure.internal.assets.default]/api/v1/public/renders/renders/bills/controller.js&agreement={{query.agreement}}"
+    target="_blank">Ver Facturas</a> -->
+
+    <div class="row" ng-cloak>
+        <div class="col s12 m12">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title ng-hide" ng-if="!calculated">No existen evidencias para la búsqueda
+                        solicitada</span>
+                    <!-- <p>Parámetros recibidos:</p> -->
+                    <div class="row">
+                        <div class="col s6">
+                            <ul>
+                                <li>
+                                    <strong>ANS</strong>: {{query.agreement}}
+                                </li>
+                                <li style="margin-top:0.5rem">
+                                    <strong>Garantía</strong>: {{query.indicator}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col s6">
+                            <ul>
+                                <li>
+                                    <strong>Zona horaria</strong>: {{query.tz}}
+                                </li>
+                                <li style="margin-top:0.5rem">
+                                    <strong>Mes/Año</strong>: {{query.periodFormated}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-action grey lighten-4 ng-hide blue-text" ng-if="!calculated">
+                    <a href="{{config.dashboard_url}}">Ir al dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="loadingOverrides" class="loading-div">
+        <img src="$_[infrastructure.external.assets.default]/api/v1/public/renders/evidences/images/loading_icon.gif" class="loading-gif"><br>
+        <span>Recalculando el estado del acuerdo... Por favor, espere.</span>
+    </div>
+    <div class="row tableWrapper" ng-cloak ng-show="calculated">
+        <table class="table table-hover">
+            <thead>
+                <tr style="font-weight: bold;">
+                    <td style="text-align: center;">ID Ticket</td>
+                    <td style="text-align: center;">Valor</td>
+                    <td style="text-align: center;">Cumplimiento</td>
+                    <td style="text-align: center;">Falso positivo</td>
+                    <td style="text-align: center;">Comentarios</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="ev in evidences">
+                    <td style="text-align: center;" ng-show="ev.id">
+                        <a ng-href="https://naossuite.juntadeandalucia.es/servicedesk/faces/jsp/incident/incidentTransact/phase/transact.xhtml?sid={{ev.id}}"
+                            target="_blank">{{ev.id}}</a>
+                    </td>
+                    <td style="text-align: center;" ng-show="ev.value">
+                        {{ev.value | number:2}}
+                    </td>
+                    <td style="text-align: center;" ng-show="ev.{{typeEvidence}}">
+                        <span ng-show="ev.{{typeEvidence}} == 'NaN'">-</span>
+                        <span style="color:green" ng-show="ev.{{typeEvidence}} == 'true'">✔</span>
+                        <span style="color:red"
+                            ng-show="ev.{{typeEvidence}} == 'false' && overrides.indexOf(ev.id)<0 && !checkRegisteredOverride(ev.id)">✘</span>
+                        <span style="color:yellow"
+                            ng-show="(ev.{{typeEvidence}} == 'false' && overrides.indexOf(ev.id)>=0) ||( ev.{{typeEvidence}} == 'false' && checkRegisteredOverride(ev.id))">✔</span>
+                        <span
+                            ng-show="!(ev.{{typeEvidence}} == 'NaN' || ev.{{typeEvidence}} == 'true' || ev.{{typeEvidence}} == 'false')">{{(ev[typeEvidence] | number:2)}}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span ng-show="ev.{{typeEvidence}} == 'true'">---</span>
+                        <div title="{{''}}">
+                            <button type="button" ng-show="ev.{{typeEvidence}} == 'false' && (overrides.indexOf(ev.id)<0) && !checkRegisteredOverride(ev.id)"
+                                ng-click="changeCurrentId(ev.id)" data-bs-toggle="modal" data-bs-target="#modal1"
+                                class="btn" ng-disabled="loadingOverrides">Falso positivo
+                            </button>
+                        </div>
+                        <span ng-show="(ev.{{typeEvidence}} == 'false' && overrides.indexOf(ev.id)>=0 && !loadingOverrides) || ( ev.{{typeEvidence}} == 'false' && checkRegisteredOverride(ev.id))"
+                            class="">Marcado como falso positivo <br> 
+                            <span class="remove-override" ng-click="undoOverride(ev.id);">Eliminar</span>
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <div class="reason-container">
+                            {{overridesReason[ev.id] | limitTo: 60 }}{{overridesReason[ev.id].length > 60 ? "..." : ''}}
+                            <a type="button" ng-if="overridesReason[ev.id].length > 60" data-bs-toggle="modal" data-bs-target="#modal2"
+                                ng-click="changeCompleteReason(overridesReason[ev.id])" class='undo-override'>Ver todo</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <button id="trigger1" style="visibility: hidden" data-bs-toggle="modal" data-bs-target="#modal3"></button>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Comentarios sobre el falso positivo</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea class="modal-textarea" ng-model="reason"></textarea>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning message" role="alert" ng-show="reason" class="warning-override"><strong>⚠ Atención</strong> : Al pulsar aceptar se realizará un recálculo del acuerdo {{query.agreement}} para el mes de {{agreementMonth}}. 
+                        Este proceso puede durar varios minutos.
+                    </div>
+                </div>
+                <br>
+                <div class="modal-footer">
+                    <button ng-click="checkOverride(currentId,reason);" ng-disabled="!reason" class="btn btn-succ" data-bs-dismiss="modal">Aceptar</button>
+                    <button ng-click="completeReason = ''" class="btn btn-warn" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Comentarios sobre el falso positivo</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <textarea readonly rows="10" class="comentario-textarea">{{completeReason}}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button ng-click="completeReason = ''" class="btn btn-warn" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="modal3" class="modal fade" tabindex="-1" style="text-align:center">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" style="justify-content: center; align-items:center">
+                No pueden marcarse falsos positivos porque la factura para el mes de {{query.periodFormated}} se ha cerrado.<br/><br/>
+                <button ng-click="refreshPage();" class="btn btn-succ">Aceptar</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-text">
+                Desarrollado por el&nbsp;
+                <a class="footer-ref" style="color:white" target="_blank" href="http://www.isa.us.es">grupo ISA</a>
+            </div>
+        </div>
+    </footer>
+</body>

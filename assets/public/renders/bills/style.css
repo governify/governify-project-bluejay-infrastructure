@@ -1,0 +1,103 @@
+.card{
+    margin: 1rem 0 1rem 0;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%), 0 3px 1px -2px rgb(0 0 0 / 20%);
+}
+
+h2{
+    font-weight: 300;font-size: 3.56rem;
+    line-height: 110%;
+    margin: 1.78rem 0 1.424rem 0;
+}
+
+li{
+    list-style-type:none;
+    margin: 0.75rem 0 0.75rem 0;
+}
+
+.tableWrapper{
+    margin-top: 3rem; 
+}
+
+td{
+    padding: 15px 100px !important;
+    vertical-align: middle;
+    text-align: center;
+}
+
+li {
+    line-height: 2.25rem;
+}
+
+.opened{
+    font-size:17px;
+    color: #48E04C;
+    text-transform: uppercase;
+}
+.closed{
+    font-size:17px;
+    color: #EE4242;
+    text-transform: uppercase;
+}
+
+.close{
+    background-color: #6BDDFA;
+    color: #fff;
+    line-height: 36px;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%), 0 3px 1px -2px rgb(0 0 0 / 20%);
+}
+.close:hover{
+    background-color: #A9EEFF;
+    color:grey;
+}
+.closeDate{
+    font-size:17px;
+    color: #8C8C8C;
+}
+
+.months{
+    width: 25em;
+}
+
+.btn-succ{
+    background-color: #61D5D4!important;
+    color:white;
+}
+.btn-warn{
+    background-color: #E94949!important;
+    color:white;
+}
+
+.btn-warn:hover{
+    color:grey;
+}
+
+.btn-succ:hover{
+    color:grey;
+}
+
+.modal-text{
+    padding: 1rem 1rem 1rem 1rem;
+}
+
+.modal-bold{
+    padding: 1rem 0 0 0;
+}
+
+.footer-container{
+    height:60px;
+    width:100vw;
+    background-color:#2196F3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: white;
+    position: absolute;
+    left: 0;
+}
+
+.footer-text{
+    position: absolute;
+    left: 15.5%;
+}
